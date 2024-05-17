@@ -1,11 +1,11 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { Stack, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
-
+import CartProvider from '../providers/CartProvider';
 import { useColorScheme } from './../components/useColorScheme';
 
 export {
@@ -17,7 +17,8 @@ export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: '(tabs)',
 };
-
+  
+ 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
@@ -40,20 +41,38 @@ export default function RootLayout() {
 
   if (!loaded) {
     return null;
-  }
+  } 
 
   return <RootLayoutNav />;
-}
+} 
+ 
+function RootLayoutNav() { 
+  const colorScheme = useColorScheme()
+  ;
+let segement =useSegments()
 
-function RootLayoutNav() {
-  const colorScheme = useColorScheme();
-
+console.log(segement);     
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
+     <CartProvider>
+       
+        <Stack>
+        {/* <Stack.Screen name="index" options={{ headerShown: false }} /> */}
+
+        <Stack.Screen name="(admin)" options={{ headerShown: false }} />
+
+        <Stack.Screen name="(users)" options={{ headerShown: false }} />
+
+ 
+    
+ 
+
+          <Stack.Screen name="cart"   options={{
+          presentation: 'modal'
+        }} />
+           
+        </Stack>
+      </CartProvider>
     </ThemeProvider>
-  );
+  ); 
 }
